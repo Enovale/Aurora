@@ -7,7 +7,7 @@ namespace Aurora;
 
 public class Updater
 {
-    public static async Task<string> DownloadNorthstar(IProgress<float> progress, CancellationToken c = default)
+    public static async Task<string> DownloadNorthstar(IProgress<float>? progress = null, CancellationToken c = default)
     {
         var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "Aurora");
@@ -24,7 +24,7 @@ public class Updater
 
     public static async Task<string> GetNorthstarReleaseUrl(CancellationToken c = default)
     {
-        var str = await GetLatestNorthstarRelease(c);
+        var str = await GetLatestNorthstarReleaseData(c);
         var json = JsonNode.Parse(str);
         return json?["assets"]?[0]?["browser_download_url"]?.ToString()
                ?? throw new Exception("Failed to grab latest release ZIP url");
@@ -32,12 +32,28 @@ public class Updater
 
     public static async Task<string> GetLatestNorthstarVersion(CancellationToken c = default)
     {
-        var str = await GetLatestNorthstarRelease(c);
+        var str = await GetLatestNorthstarReleaseData(c);
         var json = JsonNode.Parse(str);
         return json?["tag_name"]?.ToString() ?? throw new Exception("Failed to read tag name from JSON");
     }
 
-    public static async Task<string> GetLatestNorthstarRelease(CancellationToken c = default)
+    public static async Task<string[]> GetAllNorthstarVersions(CancellationToken c = default)
+    {
+        var str = await GetAllNorthstarReleaseData(c);
+        var json = JsonNode.Parse(str) as JsonArray;
+        if (json is null)
+            throw new Exception("Failed to read json release array");
+
+        var list = new string[json.Count];
+        for (var i = 0; i < json.Count; i++)
+        {
+            list[i] = json[i]?["tag_name"]?.ToString() ?? throw new Exception("Failed to read tag name from JSON");
+        }
+
+        return list;
+    }
+
+    public static async Task<string> GetLatestNorthstarReleaseData(CancellationToken c = default)
     {
         if (!Cache.TryGet(Cache.NORTHSTAR_LATEST, out var str))
         {
@@ -48,6 +64,22 @@ public class Updater
             using var content = response.Content;
             str = await content.ReadAsStringAsync(c);
             Cache.Set(Cache.NORTHSTAR_LATEST, str);
+        }
+
+        return str;
+    }
+
+    public static async Task<string> GetAllNorthstarReleaseData(CancellationToken c = default)
+    {
+        if (!Cache.TryGet(Cache.NORTHSTAR_VERSIONS, out var str))
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("User-Agent", "Aurora");
+            using var response =
+                await client.GetAsync(new Uri("https://api.github.com/repos/R2Northstar/Northstar/releases"), c);
+            using var content = response.Content;
+            str = await content.ReadAsStringAsync(c);
+            Cache.Set(Cache.NORTHSTAR_VERSIONS, str);
         }
 
         return str;

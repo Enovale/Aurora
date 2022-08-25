@@ -5,16 +5,6 @@ public static class HttpClientExtensions
     public static async Task DownloadAsync(this HttpClient client, Uri requestUri, Stream destination,
         IProgress<float>? progress = null, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var response =
-                await client.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw e;
-        }
         // Get the http headers first to examine the content length
         using (var response =
                await client.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead, cancellationToken))

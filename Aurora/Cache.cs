@@ -5,6 +5,7 @@ namespace Aurora;
 internal static class Cache
 {
     public const string NORTHSTAR_LATEST = "ns-repo";
+    public const string NORTHSTAR_VERSIONS = "ns-all";
 
     private static readonly string _localPath =
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
