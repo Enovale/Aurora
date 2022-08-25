@@ -41,13 +41,42 @@ internal static class Cache
         SerializeCache();
     }
 
+    public static void Clean()
+    {
+        var dir = new DirectoryInfo(CacheDirectory);
+        
+        foreach (var file in dir.GetFiles())
+        {
+            try
+            {
+                file.Delete();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+        
+        foreach (var sub in dir.GetDirectories())
+        {
+            try
+            {
+                sub.Delete();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+    }
+
     private static void LoadCache()
     {
         _cache = JsonSerializer.Deserialize<Dictionary<string, string>>(
             File.ReadAllText(
                 _cachePath
             )
-        );
+        )!;
     }
 
     private static void SerializeCache()

@@ -15,6 +15,7 @@ public static class Config
     static Config()
     {
         ReloadConfig();
+        Save();
     }
 
     private static void EnsurePathValid()
@@ -32,6 +33,12 @@ public static class Config
         var str = File.ReadAllText(ConfigPath);
         CoreConfig = JsonSerializer.Deserialize<CoreConfig>(str) ??
                      throw new JsonException("Failed to read core config");
+    }
+
+    public static void Reset()
+    {
+        CoreConfig = new();
+        Save();
     }
 
     public static void Save()

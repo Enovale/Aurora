@@ -1,5 +1,3 @@
-using System.Net;
-using System.Text.Json;
 using System.Text.Json.Nodes;
 using Aurora.Extensions;
 
@@ -14,10 +12,8 @@ public class Updater
         var uri = new Uri(await GetNorthstarReleaseUrl(c));
         client.Timeout = TimeSpan.FromMinutes(5);
         var path = Path.Combine(Cache.CacheDirectory, $"Northstar {await GetLatestNorthstarVersion(c)}.zip");
-        using (var file = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
-        {
-            await client.DownloadAsync(uri, file, progress, c);
-        }
+        await using var file = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
+        await client.DownloadAsync(uri, file, progress, c);
 
         return path;
     }
@@ -59,8 +55,10 @@ public class Updater
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Add("User-Agent", "Aurora");
-            using var response =
-                await client.GetAsync(new Uri("https://api.github.com/repos/R2Northstar/Northstar/releases/latest"), c);
+            using var response = await client.GetAsync(
+                new Uri($"https://api.github.com/repos/{Config.CoreConfig.NorthstarRepository}/releases/latest"),
+                c
+            );
             using var content = response.Content;
             str = await content.ReadAsStringAsync(c);
             Cache.Set(Cache.NORTHSTAR_LATEST, str);
