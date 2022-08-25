@@ -1,0 +1,6 @@
+[submodule "Aurora.Gui/Glitonea"]
+	path = Aurora.Gui/Glitonea
+	url = https://github.com/vddCore/Glitonea
+[submodule "Glitonea"]
+	path = Glitonea
+	url = https://github.com/vddCore/Glitonea

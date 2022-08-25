@@ -29,5 +29,6 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Aurora\Aurora.csproj" />
+      <ProjectReference Include="..\Glitonea\Glitonea.csproj" />
     </ItemGroup>
 </Project>

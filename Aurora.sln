@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aurora", "Aurora\Aurora.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aurora.Cli", "Aurora.Cli\Aurora.Cli.csproj", "{290C1C0C-5083-4F32-9A51-A7940EA7ABA4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glitonea", "Glitonea\Glitonea.csproj", "{8C8B961E-96FD-4861-9474-495D94A3870D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{290C1C0C-5083-4F32-9A51-A7940EA7ABA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{290C1C0C-5083-4F32-9A51-A7940EA7ABA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{290C1C0C-5083-4F32-9A51-A7940EA7ABA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C8B961E-96FD-4861-9474-495D94A3870D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C8B961E-96FD-4861-9474-495D94A3870D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C8B961E-96FD-4861-9474-495D94A3870D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C8B961E-96FD-4861-9474-495D94A3870D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
