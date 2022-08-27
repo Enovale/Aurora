@@ -10,13 +10,7 @@ public static class Config
     public static readonly string ConfigDirectory = Path.Combine(_appdataPath, PathName);
     public static readonly string ConfigPath = Path.Combine(ConfigDirectory, "core.json");
 
-    public static CoreConfig CoreConfig { get; private set; }
-
-    static Config()
-    {
-        ReloadConfig();
-        Save();
-    }
+    public static CoreConfig CoreConfig { get; set; }
 
     private static void EnsurePathValid()
     {
@@ -27,12 +21,13 @@ public static class Config
             File.WriteAllText(ConfigPath, "{}");
     }
 
-    public static void ReloadConfig()
+    public static CoreConfig LoadConfig()
     {
         EnsurePathValid();
         var str = File.ReadAllText(ConfigPath);
-        CoreConfig = JsonSerializer.Deserialize<CoreConfig>(str) ??
+        var config = JsonSerializer.Deserialize<CoreConfig>(str) ??
                      throw new JsonException("Failed to read core config");
+        return config;
     }
 
     public static void Reset()
@@ -41,13 +36,13 @@ public static class Config
         Save();
     }
 
-    public static void Save()
+    public static void Save(CoreConfig? cfg = null, string? path = null)
     {
         EnsurePathValid();
         File.WriteAllText(
-            ConfigPath,
+            path ?? ConfigPath,
             JsonSerializer.Serialize(
-                CoreConfig,
+                cfg ?? CoreConfig,
                 new JsonSerializerOptions
                 {
                     WriteIndented = true
